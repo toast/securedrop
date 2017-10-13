@@ -51,4 +51,4 @@ appserver_dependencies:
   - redis-server
   - supervisor
 
-tor_apt_repo_url: http://tor-apt.ops.freedom.press
+tor_apt_repo_url: http://tor-apt.freedom.press
