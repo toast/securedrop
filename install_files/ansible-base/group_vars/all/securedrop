@@ -51,3 +51,6 @@ appserver_dependencies:
   - redis-server
   - supervisor
 
+# Allow tor repo over-ride
+tor_repo_url: http://deb.torproject.org/torproject.org
+tor_repo_distro: "{{ ansible_lsb.codename }}"
