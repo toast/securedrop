@@ -2,8 +2,17 @@
 
 from flask_babel import gettext
 from flask_wtf import FlaskForm
-from wtforms import TextAreaField, TextField, BooleanField, HiddenField
+from wtforms import (TextAreaField, TextField, BooleanField, HiddenField,
+                     ValidationError)
 from wtforms.validators import InputRequired, Optional, Length
+
+from db import Journalist
+
+
+def otp_secret_validation(form, field):
+    strip_whitespace = field.data.replace(' ', '')
+    if len(strip_whitespace) != 40:
+        raise ValidationError(gettext('Field must be 40 characters long.'))
 
 
 class NewUserForm(FlaskForm):
@@ -18,8 +27,7 @@ class NewUserForm(FlaskForm):
      is_admin = BooleanField('is_admin')
      is_hotp = BooleanField('is_hotp')
      otp_secret = TextField('otp_secret', validators=[
-         Length(min=40, max=40,
-                message=gettext('Field must be 40 characters long.')),
+         otp_secret_validation,
          Optional()
      ])
 
