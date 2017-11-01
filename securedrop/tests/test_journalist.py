@@ -566,6 +566,49 @@ class TestJournalistApp(TestCase):
                           Journalist.MIN_USERNAME_LEN),
                       resp.data)
 
+    def test_admin_add_user_yubikey_odd_length(self):
+        self._login_admin()
+        resp = self.client.post(url_for('admin_add_user'),
+                                data=dict(username='dellsberg',
+                                          password=VALID_PASSWORD,
+                                          password_again=VALID_PASSWORD,
+                                          is_admin=None,
+                                          is_hotp=True,
+                                          otp_secret='123'))
+        self.assertIn('Field must be 40 characters long.', resp.data)
+
+    def test_admin_add_user_yubikey_valid_length(self):
+        self._login_admin()
+
+        otp = '1234567890123456789012345678901234567890'
+        resp = self.client.post(url_for('admin_add_user'),
+                                data=dict(username='dellsberg',
+                                          password=VALID_PASSWORD,
+                                          password_again=VALID_PASSWORD,
+                                          is_admin=None,
+                                          is_hotp=True,
+                                          otp_secret=otp),
+                                follow_redirects=True)
+
+        # Should redirect to the token verification page
+        self.assertIn('Enable YubiKey (OATH-HOTP)', resp.data)
+
+    def test_admin_add_user_yubikey_correct_length_with_whitespace(self):
+        self._login_admin()
+
+        otp = '12 34 56 78 90 12 34 56 78 90 12 34 56 78 90 12 34 56 78 90'
+        resp = self.client.post(url_for('admin_add_user'),
+                                data=dict(username='dellsberg',
+                                          password=VALID_PASSWORD,
+                                          password_again=VALID_PASSWORD,
+                                          is_admin=None,
+                                          is_hotp=True,
+                                          otp_secret=otp),
+                                follow_redirects=True)
+
+        # Should redirect to the token verification page
+        self.assertIn('Enable YubiKey (OATH-HOTP)', resp.data)
+
     def test_admin_sets_user_to_admin(self):
         self._login_admin()
         new_user = 'admin-set-user-to-admin-test'
