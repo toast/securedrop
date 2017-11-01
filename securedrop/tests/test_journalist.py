@@ -552,7 +552,7 @@ class TestJournalistApp(TestCase):
                                 data=dict(username='',
                                           password=VALID_PASSWORD,
                                           is_admin=None))
-        self.assertIn('Invalid username', resp.data)
+        self.assertIn('This field is required.', resp.data)
 
     def test_admin_add_user_too_short_username(self):
         self._login_admin()
@@ -562,7 +562,9 @@ class TestJournalistApp(TestCase):
                                           password='pentagonpapers',
                                           password_again='pentagonpapers',
                                           is_admin=None))
-        self.assertIn('Invalid username', resp.data)
+        self.assertIn('Field must be at least {} characters long.'.format(
+                          Journalist.MIN_USERNAME_LEN),
+                      resp.data)
 
     def test_admin_sets_user_to_admin(self):
         self._login_admin()
