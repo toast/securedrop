@@ -54,3 +54,6 @@ appserver_dependencies:
 # Allow tor repo over-ride
 tor_repo_url: http://deb.torproject.org/torproject.org
 tor_repo_distro: "{{ ansible_lsb.codename }}"
+tor_repo_pkgs:
+  - tor
+  - deb.torproject.org-keyring

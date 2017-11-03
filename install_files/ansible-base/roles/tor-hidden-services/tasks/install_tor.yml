@@ -27,9 +27,7 @@
     state: latest
     update_cache: yes
     cache_valid_time: 3600
-  with_items:
-    - deb.torproject.org-keyring
-    - tor
+  with_items: "{{ tor_repo_pkgs }}"
   tags:
     - apt
     - tor
