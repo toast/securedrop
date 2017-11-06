@@ -6,7 +6,7 @@
       {% if locale == g.locale %}
         {{ g.locales[locale] }}
       {% else %}
-        <a href="?l={{ locale }}" rel="nofollow">{{ g.locales[locale] }}</a>
+        <a href="/?l={{ locale }}" rel="nofollow">{{ g.locales[locale] }}</a>
       {% endif %}
       </li>
     {% endfor %}
